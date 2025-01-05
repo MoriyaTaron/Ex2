@@ -38,16 +38,17 @@ public class SCell implements Cell {
 
     public  static boolean isForm(String sCell){
         sCell=sCell.replaceAll(" ","");
-        if (sCell.charAt(0)!='=')
-            return false;
-        if (!vSf(sCell.substring(1)))
-        return false;
+
         try {
             computForm(sCell);
         } catch (Exception e){
             return false;
 
         }
+        if (sCell.charAt(0)!='=')
+            return false;
+        if (!vSf(sCell.substring(1)))
+            return false;
         return true;
     }
     public  static double computForm(String form){
@@ -151,8 +152,18 @@ public class SCell implements Cell {
 
 
     public SCell(String s) {
-        // Add your code here
-        setData(s);
+        if (isNumber(s)) {
+            setType(2);
+            setData(s);
+        }
+         else if (isForm(s)) {
+            setType(3);
+            setData(Double.toString(computForm(s)));
+        }
+        if (isText(s)) {
+            setType(1);
+            setData(s);
+        }
     }
 
     @Override
