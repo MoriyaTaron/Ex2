@@ -3,8 +3,8 @@
 public class SCell implements Cell {
     private String line;
     private int type;
-    public boolean vSf (String s){// valid signs for form beside "="
-        char [] validSigns  = {'A','B','C','D','E','F','G','H','I','1','2','3','4','5','6','7','8','9','0',' ','+','-','*','/','(',')'};
+    public static boolean vSf (String s){// valid signs for form beside "="
+        char [] validSigns  = {'A','B','C','D','E','F','G','H','I','1','2','3','4','5','6','7','8','9','0',' ','+','-','*','/','(',')','.'};
         for (int i = 1; i<s.length();i++){
             int valid = 0;
             for (int j = 0;j< validSigns.length;j++){
@@ -36,7 +36,8 @@ public class SCell implements Cell {
 
 
 
-    public boolean isForm(String sCell){
+    public  static boolean isForm(String sCell){
+        sCell=sCell.replaceAll(" ","");
         if (sCell.charAt(0)!='=')
             return false;
         if (!vSf(sCell.substring(1)))
@@ -50,6 +51,7 @@ public class SCell implements Cell {
         return true;
     }
     public  static double computForm(String form){
+      form = form.replaceAll(" ","");
         if (form.charAt(0)=='=')
             form= form.substring(1);
         if (isNumber(form)){
@@ -83,7 +85,7 @@ public class SCell implements Cell {
                 return computForm(form.substring(1,form.length()-1));
             }
               double insidround = computForm(form.substring(firstRou+1,lastRou));
-           form = form.substring(0,firstRou)+Double.toString(insidround)+form.substring(lastRou+1,form.length());
+            form = form.substring(0,firstRou)+Double.toString(insidround)+form.substring(lastRou+1,form.length());
 
 
 
@@ -120,7 +122,7 @@ public class SCell implements Cell {
                 }
             }
         }
-        if(indOArr==1&& !form.contains("(")){
+        if(indOArr==1&& !form.contains("(")){// חייבת לסדר את העניין הזה עם המינוסים ולהסיר מהשורה  הזאת את  ה contains () כי אני רוצה שזה יפתור לי גם מינוסים
             double firstNum = Double.parseDouble(form.substring(0,indOfop[0]));
             double secNum = Double.parseDouble(form.substring(indOfop[0]+1));
             if (op[0]=='+')
@@ -132,12 +134,20 @@ public class SCell implements Cell {
                         if (op[0]=='/')
                           return  firstNum/secNum;
         }
+        for (int i = 0;i<form.length();i++){
+
+
+        }
         double first=computForm(form.substring(0,indOfop[indOArr-1]));
         double second = computForm(form.substring(indOfop[indOArr-1]+1));
         return  computForm(String.valueOf(first)+form.charAt(indOfop[indOArr-1])+String.valueOf(second));
 
     }
-    // Add your code here
+    public static boolean isText(String text){
+        if (isNumber(text)||isForm(text))
+            return false;
+        return true;
+    }
 
 
     public SCell(String s) {
