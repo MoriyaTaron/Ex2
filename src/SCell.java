@@ -5,7 +5,7 @@ public class SCell implements Cell {
     private int type;
     public static boolean vSf (String s){// valid signs for form beside "="
         char [] validSigns  = {'A','B','C','D','E','F','G','H','I','1','2','3','4','5','6','7','8','9','0',' ','+','-','*','/','(',')','.'};
-        for (int i = 1; i<s.length();i++){
+        for (int i = 0; i<s.length();i++){
             int valid = 0;
             for (int j = 0;j< validSigns.length;j++){
                 if (s.charAt(i)==validSigns[j]){
@@ -18,7 +18,8 @@ public class SCell implements Cell {
         return true;
     }
 
-    public static boolean isNumber(String sCell){ // "1234"
+    public static boolean isNumber(String sCell){
+        sCell = sCell.replaceAll(" ","");// "1234"
         try {
             double num = Double.parseDouble(sCell);
             return true;
@@ -36,19 +37,19 @@ public class SCell implements Cell {
 
 
 
-    public  static boolean isForm(String sCell){
-        sCell=sCell.replaceAll(" ","");
-
+    public  static boolean isForm(String s){
+        s = s.replace(" ","");
         try {
-            computForm(sCell);
+            computForm(s);
         } catch (Exception e){
             return false;
 
         }
-        if (sCell.charAt(0)!='=')
+        if (!vSf(s.substring(1)))
             return false;
-        if (!vSf(sCell.substring(1)))
+        if (s.charAt(0)!='=')
             return false;
+
         return true;
     }
     public  static double computForm(String form){
@@ -86,12 +87,26 @@ public class SCell implements Cell {
                 return computForm(form.substring(1,form.length()-1));
             }
               double insidround = computForm(form.substring(firstRou+1,lastRou));
+            if (insidround<0)
+                form = form.substring(0,firstRou)+'('+Double.toString(insidround)+')'+form.substring(lastRou+1,form.length());
+            else
             form = form.substring(0,firstRou)+Double.toString(insidround)+form.substring(lastRou+1,form.length());
 
 
 
         }
         for (int i = 0;i<form.length();i++){
+            if (i==0&&form.charAt(0)=='-'){
+                    i=1;
+            }
+            if (form.charAt(i)=='('){
+                for (int j = i+1;j<form.length();j++){
+                    if (form.charAt(j)==')'){
+                        i=j;
+                        break;
+                    }
+                }
+            }
 
         if (form.charAt(i)=='+'||form.charAt(i)=='-'){
             valueop[indOArr]=1;
@@ -123,9 +138,9 @@ public class SCell implements Cell {
                 }
             }
         }
-        if(indOArr==1&& !form.contains("(")){// חייבת לסדר את העניין הזה עם המינוסים ולהסיר מהשורה  הזאת את  ה contains () כי אני רוצה שזה יפתור לי גם מינוסים
-            double firstNum = Double.parseDouble(form.substring(0,indOfop[0]));
-            double secNum = Double.parseDouble(form.substring(indOfop[0]+1));
+        if(indOArr==1){// חייבת לסדר את העניין הזה עם המינוסים ולהסיר מהשורה  הזאת את  ה contains () כי אני רוצה שזה יפתור לי גם מינוסים
+            double firstNum = Double.parseDouble(form.substring(0,indOfop[0]).replace("(","").replace(")",""));
+            double secNum = Double.parseDouble(form.substring(indOfop[0]+1).replace("(","").replace(")",""));
             if (op[0]=='+')
                 return firstNum+secNum;
                 if (op[0]=='-')
@@ -134,15 +149,27 @@ public class SCell implements Cell {
                         return firstNum*secNum;
                         if (op[0]=='/')
                           return  firstNum/secNum;
-        }
-        for (int i = 0;i<form.length();i++){
 
-
+           // return firstNum +form.charAt(indOfop[0])+ secNum;
         }
+//        if (form.charAt(0) == '-') {
+//            return - +computForm(form.substring(1));
+//        }
         double first=computForm(form.substring(0,indOfop[indOArr-1]));
         double second = computForm(form.substring(indOfop[indOArr-1]+1));
-        return  computForm(String.valueOf(first)+form.charAt(indOfop[indOArr-1])+String.valueOf(second));
+        if (form.charAt(indOfop[indOArr-1])=='+')
+            return first+second;
+        if (form.charAt(indOfop[indOArr-1])=='-')
+            return first - second;
+        if (form.charAt(indOfop[indOArr-1])=='*')
+            return first * second;
+        if (form.charAt(indOfop[indOArr-1])=='/')
+            return first / second;
+        else {
+            throw new IllegalArgumentException("not a form");
+            //return  computForm(String.valueOf(first)+form.charAt(indOfop[indOArr-1])+String.valueOf(second));
 
+        }
     }
     public static boolean isText(String text){
         if (isNumber(text)||isForm(text))
