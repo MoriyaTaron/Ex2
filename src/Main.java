@@ -2,7 +2,12 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        System.out.println(SCell.computForm("=-5-2"));
+       // System.out.println(SCell.computForm("=-5-2"));
+        String s ="kgk";
+       if (Ex2Sheet.containCell("=A151"))
+            System.out.println("yes");
+        else
+            System.out.println("not");
     }
 }
 

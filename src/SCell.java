@@ -180,15 +180,15 @@ public class SCell implements Cell {
 
     public SCell(String s) {
         if (isNumber(s)) {
-            setType(2);
+            setType(Ex2Utils.NUMBER);
             setData(s);
         }
          else if (isForm(s)) {
-            setType(3);
+            setType(Ex2Utils.FORM);
             setData(Double.toString(computForm(s)));
         }
-        if (isText(s)) {
-            setType(1);
+        else if (isText(s)) {
+            setType(Ex2Utils.TEXT);
             setData(s);
         }
     }
