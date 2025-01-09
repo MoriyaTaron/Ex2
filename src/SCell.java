@@ -187,6 +187,10 @@ public class SCell implements Cell {
             setType(Ex2Utils.FORM);
             setData(Double.toString(computForm(s)));
         }
+        else if (errform(s)){
+            setType(Ex2Utils.ERR);
+            setData(Ex2Utils.ERR_FORM);
+        }
         else if (isText(s)) {
             setType(Ex2Utils.TEXT);
             setData(s);
@@ -215,7 +219,16 @@ public class SCell implements Cell {
     }
     @Override
     public String getData() {
-        return line;
+        if (isNumber(line))
+            return line;
+        else if (isForm(line))
+            return Double.toString(computForm(line));
+//       else if (isText(line))//&&line.charAt(0)=='=')
+//        return Ex2Utils.ERR_FORM;
+//       else if (isText(line))
+           return line;
+//       else return
+
     }
 
     @Override
@@ -232,5 +245,13 @@ public class SCell implements Cell {
     public void setOrder(int t) {
         // Add your code here
 
+    }
+
+    public static boolean errform(String s){
+        if (s != ""){
+        if (s.charAt(0)=='='&&!isForm(s))
+            return true;
+        }
+        return false;
     }
 }

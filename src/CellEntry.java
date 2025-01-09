@@ -6,7 +6,7 @@ public CellEntry(String indOfCell){
     this.indOfCell=indOfCell;
 }
     @Override
-    public boolean isValid() {
+    public  boolean isValid() {
         if (this.indOfCell.length()>3||this.indOfCell.length()<2)
             return false;
         boolean validLet = false;
@@ -51,4 +51,8 @@ public CellEntry(String indOfCell){
         }
         return Ex2Utils.ERR;
     }
+    public String toString(){
+    return this.indOfCell;
+    }
+
 }

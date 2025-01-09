@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 public class Ex2Sheet implements Sheet {
     private Cell[][] table;
+    private CellEntry cordin;
     // Add your code here
 
     // ///////////////////
@@ -12,6 +13,7 @@ public class Ex2Sheet implements Sheet {
         for(int i=0;i<x;i=i+1) {
             for(int j=0;j<y;j=j+1) {
                 table[i][j] = new SCell("");
+                cordin = new CellEntry(Ex2Utils.ABC[i]+Integer.toString(j));
             }
         }
         eval();
@@ -41,13 +43,16 @@ public class Ex2Sheet implements Sheet {
     @Override
     public Cell get(String cords) {
         Cell ans = null;
-        CellEntry cordcel = new CellEntry(cords);
-        if (cordcel.isValid()){
-          if (isIn(cordcel.getX(),cordcel.getY()));
-            ans = get(cordcel.getX(),cordcel.getY());
-
-
-        }
+        //if (containCell(cords)){     לבדוק אם זה עובד בלי הקונטיין אולי זה אמור להחזיר רק את הסל במידה והוא קיים בתאים
+            for (int i = 0;i<Ex2Utils.ABC.length;i++){
+                if (cords.charAt(0)+""==Ex2Utils.ABC[i]) {
+                    if (isIn(i, Integer.parseInt(cords.substring(1)))){
+                        ans = this.table[i][Integer.parseInt(cords.substring(1))];
+                        break;
+                        }
+                }
+            }
+        //}
         // Add your code here
 
         /////////////////////
@@ -79,7 +84,7 @@ public class Ex2Sheet implements Sheet {
     }
 
     @Override
-    public boolean isIn(int xx, int yy) { //חושבת שממשתי צריכה לבדוק
+    public  boolean isIn(int xx, int yy) { //חושבת שממשתי צריכה לבדוק
         boolean ans = xx>=0 && yy>=0&& xx<=this.width()&&yy<=this.height() ;
 
         // Add your code here
@@ -114,17 +119,18 @@ public class Ex2Sheet implements Sheet {
     @Override
     public String eval(int x, int y) {
         String ans = null;
-        if (isIn(x,y)){
-             if(get(x,y)!=null) {
-                 if (containCell(get(x, y).getData())) {
-                    get(x,y).setData("hello");
-                     return get(x,y).getData();
-
-                 }
-             }  //String
-            //ans = get(x,y).toString();
-
-        }
+//        if (isIn(x,y)){
+//             if(get(x,y)!=null) {
+//                     if (containCell(get(x,y).toString())){
+//                         if (SCell.isForm(getCels(get(x,y).toString()))){
+//                             String formu = Double.toString(SCell.computForm(getCels(get(x,y).toString())));
+//                         set(x,y,formu);
+//                    }
+//                 }
+//             }  //String
+//            ans = get(x,y).toString();
+//
+//        }
         // Add your code here
 
         /////////////////////
@@ -163,22 +169,56 @@ public class Ex2Sheet implements Sheet {
         }
 return ans;
     }
-    // פונקציה שבמידה ויש תאים בסטרינג מסויים היא מחזירה את הסטרינג המקורי ובמקום השם של התא היא שמה סטרינג של תוכן התא שקראו אליו(במידה והוא תקף)
-//    public static String getCels(String s){
-//        s=s.toUpperCase();
-//        int count = 0;
-//        int[] indofletr= new int[s.length()];
-//        for (int i = 0; i<s.length();i++){
-//            if (s.charAt(i)>='A'&&s.charAt(i)<='Z')
-//                indofletr[count]=i;
-//                count++;
-//        }
-//        String[] amountOfCe = new String[count];
-//        for (int i = 0; i<count;i++){
-//            if (i+1<s.length())
-//    //   if ()    indofletr[i]+2
-//        }
-//    }
+
+ //    פונקציה שבמידה ויש תאים בסטרינג מסויים היא מחזירה את הסטרינג המקורי ובמקום השם של התא היא שמה סטרינג של תוכן התא שקראו אליו(במידה והוא תקף)
+    public String getCels(String s){
+        String ans = Ex2Utils.ERR_FORM;
+        s=s.toUpperCase();
+        int count = 0;
+        int countcel = 0;
+        int[] indofletr= new int[s.length()];
+        String[] cells = new String[s.length()];
+        for (int i = 0; i<s.length();i++){
+            if (s.charAt(i)>='A'&&s.charAt(i)<='Z') {
+                indofletr[count] = i;
+//                cells[count]=s.charAt(i)+"";
+                count++;
+
+            }
+        }
+        String[] amountOfCe = new String[count];
+        for (int i = 0; i<count;i++){
+            if (s.length()>=indofletr[i]+3){
+       if (s.charAt(indofletr[i]+2)>='0'&&s.charAt(indofletr[i]+2)<='9') {
+           cells[countcel] = s.substring(indofletr[i], indofletr[i] + 3);
+           countcel++;
+       }
+       else {
+                cells[countcel]=s.substring(indofletr[i],indofletr[i]+2);
+                countcel++;
+                }
+       }
+       else {
+           cells[countcel]=s.substring(indofletr[i],indofletr[i]+2);
+           countcel++;
+       }
+        }
+        for (int i = 0;i<countcel;i++){
+            CellEntry cellEntry = new CellEntry(cells[i]);
+            if (isIn(cellEntry.getX(),cellEntry.getY())){
+                if (get(cellEntry.getX(),cellEntry.getY())==null||get(cellEntry.getX(),cellEntry.getY()).getType()==Ex2Utils.TEXT){
+                    return Ex2Utils.ERR_FORM;
+                }
+
+                s=   s.replaceAll(cells[i], "("+eval(cellEntry.getX(),cellEntry.getY())+")");
+
+            }
+            }
+
+
+        return s;
+    }
+    }
 
 
 
@@ -186,6 +226,6 @@ return ans;
 
 
 
-}
+
 
 
