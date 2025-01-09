@@ -150,11 +150,11 @@ public class SCell implements Cell {
                         if (op[0]=='/')
                           return  firstNum/secNum;
 
-           // return firstNum +form.charAt(indOfop[0])+ secNum;
+            return firstNum +form.charAt(indOfop[0])+ secNum;
         }
-//        if (form.charAt(0) == '-') {
-//            return - +computForm(form.substring(1));
-//        }
+        if (form.charAt(0) == '-') {
+            return - +computForm(form.substring(1));
+        }
         double first=computForm(form.substring(0,indOfop[indOArr-1]));
         double second = computForm(form.substring(indOfop[indOArr-1]+1));
         if (form.charAt(indOfop[indOArr-1])=='+')
@@ -195,6 +195,7 @@ public class SCell implements Cell {
             setType(Ex2Utils.TEXT);
             setData(s);
         }
+
     }
 
     @Override
