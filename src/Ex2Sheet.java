@@ -10,15 +10,16 @@ public class Ex2Sheet implements Sheet {
     // ///////////////////
     public Ex2Sheet(int x, int y) {
         table = new SCell[x][y];
-        for(int i=0;i<x;i=i+1) {
-            for(int j=0;j<y;j=j+1) {
+        for (int i = 0; i < x; i = i + 1) {
+            for (int j = 0; j < y; j = j + 1) {
                 table[i][j] = new SCell("");
-                cordin = new CellEntry(Ex2Utils.ABC[i]+Integer.toString(j));
-               // table[i][j].setData(eval(i,j));
+                cordin = new CellEntry(Ex2Utils.ABC[i] + Integer.toString(j));
+                // table[i][j].setData(eval(i,j));
             }
         }
         eval();
     }
+
     public Ex2Sheet() {
 
         this(Ex2Utils.WIDTH, Ex2Utils.HEIGHT);
@@ -27,10 +28,28 @@ public class Ex2Sheet implements Sheet {
     @Override
     public String value(int x, int y) {
         String ans = Ex2Utils.EMPTY_CELL;
-        // Add your code here
-
-        Cell c = get(x,y);
-        if(c!=null) {ans = c.toString();}
+        Cell c = get(x, y);
+        if (c != null && c.toString() != Ex2Utils.EMPTY_CELL) {
+            if (c.getType() == Ex2Utils.FORM) {
+                return Double.toString(SCell.computForm(c.getData()));
+            }
+            if (containCell(c.toString())) {
+                if (getCels(c.toString()) == Ex2Utils.ERR_FORM) {
+                    c.setType(Ex2Utils.ERR_FORM_FORMAT);
+                    return Ex2Utils.ERR_FORM;
+                }
+                if (!SCell.isForm(getCels(c.toString()))) {
+                    c.setType(Ex2Utils.ERR_FORM_FORMAT);
+                    return Ex2Utils.ERR_FORM;
+                } else {
+                    c.setType(Ex2Utils.FORM);//נתקע כל הזמןןן
+                    return Double.toString(SCell.computForm(getCels(c.toString())));
+                }
+            }
+            if (c.getType() == Ex2Utils.ERR_FORM_FORMAT)
+                return Ex2Utils.ERR_FORM;
+            ans = c.toString();
+        }
 
         /////////////////////
         return ans;
@@ -45,14 +64,14 @@ public class Ex2Sheet implements Sheet {
     public Cell get(String cords) {
         Cell ans = null;
         //if (containCell(cords)){     לבדוק אם זה עובד בלי הקונטיין אולי זה אמור להחזיר רק את הסל במידה והוא קיים בתאים
-            for (int i = 0;i<Ex2Utils.ABC.length;i++){
-                if (cords.charAt(0)+""==Ex2Utils.ABC[i]) {
-                    if (isIn(i, Integer.parseInt(cords.substring(1)))){
-                        ans = this.table[i][Integer.parseInt(cords.substring(1))];
-                        break;
-                        }
+        for (int i = 0; i < Ex2Utils.ABC.length; i++) {
+            if (cords.charAt(0) + "" == Ex2Utils.ABC[i]) {
+                if (isIn(i, Integer.parseInt(cords.substring(1)))) {
+                    ans = this.table[i][Integer.parseInt(cords.substring(1))];
+                    break;
                 }
             }
+        }
         //}
         // Add your code here
 
@@ -64,10 +83,12 @@ public class Ex2Sheet implements Sheet {
     public int width() {
         return table.length;
     }
+
     @Override
     public int height() {
         return table[0].length;
     }
+
     @Override
     public void set(int x, int y, String s) {
         Cell c = new SCell(s);
@@ -76,6 +97,7 @@ public class Ex2Sheet implements Sheet {
 
         /////////////////////
     }
+
     @Override
     public void eval() {
         int[][] dd = depth();
@@ -85,8 +107,8 @@ public class Ex2Sheet implements Sheet {
     }
 
     @Override
-    public  boolean isIn(int xx, int yy) { //חושבת שממשתי צריכה לבדוק
-        boolean ans = xx>=0 && yy>=0&& xx<=this.width()&&yy<=this.height() ;
+    public boolean isIn(int xx, int yy) { //חושבת שממשתי צריכה לבדוק
+        boolean ans = xx >= 0 && yy >= 0 && xx <= this.width() && yy <= this.height();
 
         // Add your code here
 
@@ -120,48 +142,44 @@ public class Ex2Sheet implements Sheet {
     @Override
     public String eval(int x, int y) {
         String ans = null;
-        if (isIn(x,y)){
-             if(get(x,y)!=null) {
-                     if (containCell(get(x,y).toString())){
-                         if (SCell.isForm(getCels(get(x,y).toString()))){
-                             String formu = Double.toString(SCell.computForm(getCels(get(x,y).toString())));
-                         set(x,y,formu);
-                         return ans=Double.toString(SCell.computForm(getCels(get(x,y).toString())));
+        if (isIn(x, y)) {
+            if (get(x, y) != null) {
+                if (containCell(get(x, y).toString())) {
+                    if (SCell.isForm(getCels(get(x, y).toString()))) {
+                        String formu = Double.toString(SCell.computForm(getCels(get(x, y).toString())));
+                        set(x, y, formu);
+                        return ans = Double.toString(SCell.computForm(getCels(get(x, y).toString())));
                     }
-                 }
-             }  //String
-            ans = get(x,y).toString();
+                }
+            }  //String
+            ans = get(x, y).toString();
 
         }
 
 
         ///////////////////
         return ans;
-        }
-
-
-
-
+    }
 
 
 //פונקציית עזר לבדיקה האם יש תאים בסטרינג מסויים
 
-    public  static boolean containCell(String s){
-        if (s.charAt(0)!= '=')
+    public static boolean containCell(String s) {
+        if (s.charAt(0) != '=')
             return false;
         s = s.toUpperCase();
         boolean ans = false;
-        for (int i = 0;i<Ex2Utils.ABC.length;i++){
-            if (s.contains(Ex2Utils.ABC[i])){
-                ans=true;
-                for (int j = 0; j<s.length();j++) {
-                    if (s.charAt(j)>='A'&&s.charAt(j)<='Z'){
-                        if (j==s.length()-1)
+        for (int i = 0; i < Ex2Utils.ABC.length; i++) {
+            if (s.contains(Ex2Utils.ABC[i])) {
+                ans = true;
+                for (int j = 0; j < s.length(); j++) {
+                    if (s.charAt(j) >= 'A' && s.charAt(j) <= 'Z') {
+                        if (j == s.length() - 1)
                             return false;
-                        if (!(s.charAt(j+1)>='0'&&s.charAt(j+1)<='9'))
+                        if (!(s.charAt(j + 1) >= '0' && s.charAt(j + 1) <= '9'))
                             return false;
-                        if (j+2<s.length()-1){
-                            if ((s.charAt(j+2)>='0'&& s.charAt(j+2)<='9')&&(s.charAt(j+3)>='0'&&s.charAt(j+3)<='9'))
+                        if (j + 2 < s.length() - 1) {
+                            if ((s.charAt(j + 2) >= '0' && s.charAt(j + 2) <= '9') && (s.charAt(j + 3) >= '0' && s.charAt(j + 3) <= '9'))
                                 return false;
                         }
                     }
@@ -169,19 +187,19 @@ public class Ex2Sheet implements Sheet {
             }
 
         }
-return ans;
+        return ans;
     }
 
- //    פונקציה שבמידה ויש תאים בסטרינג מסויים היא מחזירה את הסטרינג המקורי ובמקום השם של התא היא שמה סטרינג של תוכן התא שקראו אליו(במידה והוא תקף)
-    public String getCels(String s){
+    //    פונקציה שבמידה ויש תאים בסטרינג מסויים היא מחזירה את הסטרינג המקורי ובמקום השם של התא היא שמה סטרינג של תוכן התא שקראו אליו(במידה והוא תקף)
+    public String getCels(String s) {
         String ans = Ex2Utils.ERR_FORM;
-        s=s.toUpperCase();
+        s = s.toUpperCase();
         int count = 0;
         int countcel = 0;
-        int[] indofletr= new int[s.length()];
+        int[] indofletr = new int[s.length()];
         String[] cells = new String[s.length()];
-        for (int i = 0; i<s.length();i++){
-            if (s.charAt(i)>='A'&&s.charAt(i)<='Z') {
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) >= 'A' && s.charAt(i) <= 'Z') {
                 indofletr[count] = i;
 //                cells[count]=s.charAt(i)+"";
                 count++;
@@ -189,38 +207,38 @@ return ans;
             }
         }
         String[] amountOfCe = new String[count];
-        for (int i = 0; i<count;i++){
-            if (s.length()>=indofletr[i]+3){
-       if (s.charAt(indofletr[i]+2)>='0'&&s.charAt(indofletr[i]+2)<='9') {
-           cells[countcel] = s.substring(indofletr[i], indofletr[i] + 3);
-           countcel++;
-       }
-       else {
-                cells[countcel]=s.substring(indofletr[i],indofletr[i]+2);
-                countcel++;
+        for (int i = 0; i < count; i++) {
+            if (s.length() >= indofletr[i] + 3) {
+                if (s.charAt(indofletr[i] + 2) >= '0' && s.charAt(indofletr[i] + 2) <= '9') {
+                    cells[countcel] = s.substring(indofletr[i], indofletr[i] + 3);
+                    countcel++;
+                } else {
+                    cells[countcel] = s.substring(indofletr[i], indofletr[i] + 2);
+                    countcel++;
                 }
-       }
-       else {
-           cells[countcel]=s.substring(indofletr[i],indofletr[i]+2);
-           countcel++;
-       }
+            } else {
+                cells[countcel] = s.substring(indofletr[i], indofletr[i] + 2);
+                countcel++;
+            }
         }
-        for (int i = 0;i<countcel;i++){
+        for (int i = 0; i < countcel; i++) {
             CellEntry cellEntry = new CellEntry(cells[i]);
-            if (isIn(cellEntry.getX(),cellEntry.getY())){
-                if (get(cellEntry.getX(),cellEntry.getY())==null||get(cellEntry.getX(),cellEntry.getY()).getType()==Ex2Utils.TEXT){
+            if (isIn(cellEntry.getX(), cellEntry.getY())) {
+                if (get(cellEntry.getX(), cellEntry.getY()) == null || get(cellEntry.getX(), cellEntry.getY()).getType() == Ex2Utils.TEXT) {
                     return Ex2Utils.ERR_FORM;
                 }
-
-                s=   s.replaceAll(cells[i], "("+eval(cellEntry.getX(),cellEntry.getY())+")");
+                if (containCell(s.replaceAll(cells[i], "(" + get(cellEntry.getX(), cellEntry.getY()).getData().replace("=", "") + ")")))
+                    s = getCels(s.replaceAll(cells[i], "(" + get(cellEntry.getX(), cellEntry.getY()).getData().replace("=", "") + ")"));
+                else
+                    s = s.replaceAll(cells[i], "(" + get(cellEntry.getX(), cellEntry.getY()).getData().replace("=", "") + ")");// לבדוקקק
 
             }
-            }
+        }
 
 
         return s;
     }
-    }
+}
 
 
 

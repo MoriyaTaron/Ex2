@@ -185,11 +185,11 @@ public class SCell implements Cell {
         }
          else if (isForm(s)) {
             setType(Ex2Utils.FORM);
-            setData(Double.toString(computForm(s)));
+            setData(s);
         }
         else if (errform(s)){
-            setType(Ex2Utils.ERR);
-            setData(Ex2Utils.ERR_FORM);
+            setType(Ex2Utils.ERR_FORM_FORMAT);
+            setData(s);
         }
         else if (isText(s)) {
             setType(Ex2Utils.TEXT);
@@ -219,10 +219,10 @@ public class SCell implements Cell {
     }
     @Override
     public String getData() {
-        if (isNumber(line))
-            return line;
-        else if (isForm(line))
-            return Double.toString(computForm(line));
+//        if (isNumber(line))
+//            return line;
+//        else if (isForm(line))
+//            return Double.toString(computForm(line));
 //       else if (isText(line))//&&line.charAt(0)=='=')
 //        return Ex2Utils.ERR_FORM;
 //       else if (isText(line))
