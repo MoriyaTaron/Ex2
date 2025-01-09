@@ -14,6 +14,7 @@ public class Ex2Sheet implements Sheet {
             for(int j=0;j<y;j=j+1) {
                 table[i][j] = new SCell("");
                 cordin = new CellEntry(Ex2Utils.ABC[i]+Integer.toString(j));
+               // table[i][j].setData(eval(i,j));
             }
         }
         eval();
@@ -119,21 +120,22 @@ public class Ex2Sheet implements Sheet {
     @Override
     public String eval(int x, int y) {
         String ans = null;
-//        if (isIn(x,y)){
-//             if(get(x,y)!=null) {
-//                     if (containCell(get(x,y).toString())){
-//                         if (SCell.isForm(getCels(get(x,y).toString()))){
-//                             String formu = Double.toString(SCell.computForm(getCels(get(x,y).toString())));
-//                         set(x,y,formu);
-//                    }
-//                 }
-//             }  //String
-//            ans = get(x,y).toString();
-//
-//        }
-        // Add your code here
+        if (isIn(x,y)){
+             if(get(x,y)!=null) {
+                     if (containCell(get(x,y).toString())){
+                         if (SCell.isForm(getCels(get(x,y).toString()))){
+                             String formu = Double.toString(SCell.computForm(getCels(get(x,y).toString())));
+                         set(x,y,formu);
+                         return ans=Double.toString(SCell.computForm(getCels(get(x,y).toString())));
+                    }
+                 }
+             }  //String
+            ans = get(x,y).toString();
 
-        /////////////////////
+        }
+
+
+        ///////////////////
         return ans;
         }
 

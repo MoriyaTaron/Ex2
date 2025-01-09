@@ -2,6 +2,9 @@
 
 public class CellEntry  implements Index2D {
     private String indOfCell;
+    public CellEntry( int x, int y){
+        setIndOfCell(x,y);
+    }
 public CellEntry(String indOfCell){
     this.indOfCell=indOfCell;
 }
@@ -54,5 +57,13 @@ public CellEntry(String indOfCell){
     public String toString(){
     return this.indOfCell;
     }
+    public String getIndOfCell(int x, int y){
+        return indOfCell;
+    }
+public void setIndOfCell(int x, int y){
+        this.indOfCell =Ex2Utils.ABC[x]+Integer.toString(y);
+    }
 
-}
+
+
+    }
