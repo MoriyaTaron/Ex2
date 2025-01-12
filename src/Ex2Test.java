@@ -64,6 +64,10 @@ public class Ex2Test {
         tester.set(0,1,"=2");
         tester.set(1,1,"=5+A1");
     }
+    @Test
+    public void trstcomputform(){
+        assertEquals(SCell.computForm("=5*(-5)"), -25);
+    }
 }
 
 

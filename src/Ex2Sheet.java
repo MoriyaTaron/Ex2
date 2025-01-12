@@ -14,7 +14,7 @@ public class Ex2Sheet implements Sheet {
             for(int j=0;j<y;j=j+1) {
                 table[i][j] = new SCell("");
                 cordin = new CellEntry(Ex2Utils.ABC[i]+Integer.toString(j));
-               // table[i][j].setData(eval(i,j));
+                // table[i][j].setData(eval(i,j));
             }
         }
         eval();
@@ -38,6 +38,11 @@ public class Ex2Sheet implements Sheet {
                 return c.getData();
             }
             if (containCell(c.toString())) {
+                cordin= new CellEntry(x, y);
+                if (c.toString().toUpperCase().contains(cordin.toString() )){
+                     c.setType(Ex2Utils.ERR_CYCLE_FORM);
+                     return Ex2Utils.ERR_CYCLE;//כדי שיהיה דגיאה על מעגליות ( אני עוד חייבת לבדוק את זה ולשפר)
+                }
                 if (getCels(c.toString()) == Ex2Utils.ERR_FORM) {
                     c.setType(Ex2Utils.ERR_FORM_FORMAT);
                     return Ex2Utils.ERR_FORM;
@@ -46,10 +51,10 @@ public class Ex2Sheet implements Sheet {
                     c.setType(Ex2Utils.ERR_FORM_FORMAT);
                     return Ex2Utils.ERR_FORM;
                 } else{
-                      c.setType(Ex2Utils.FORM);//נתקע כל הזמןןן
+                    c.setType(Ex2Utils.FORM);//נתקע כל הזמןןן
                     return Double.toString(SCell.computForm(getCels(c.toString())));
-            }
                 }
+            }
             if (SCell.errform(c.getData())) {
                 c.setType(Ex2Utils.ERR_FORM_FORMAT);
                 return Ex2Utils.ERR_FORM;
@@ -82,8 +87,8 @@ public class Ex2Sheet implements Sheet {
                         return ans;
                     }
                 }
-                }
             }
+        }
         return ans;
     }
 
@@ -148,15 +153,15 @@ public class Ex2Sheet implements Sheet {
     public String eval(int x, int y) {
         String ans = null;
         if (isIn(x,y)){
-             if(get(x,y)!=null) {
-                     if (containCell(get(x,y).toString())){
-                         if (SCell.isForm(getCels(get(x,y).toString()))){
-                             String formu = Double.toString(SCell.computForm(getCels(get(x,y).toString())));
-                         set(x,y,formu);
-                         return ans=Double.toString(SCell.computForm(getCels(get(x,y).toString())));
+            if(get(x,y)!=null) {
+                if (containCell(get(x,y).toString())){
+                    if (SCell.isForm(getCels(get(x,y).toString()))){
+                        String formu = Double.toString(SCell.computForm(getCels(get(x,y).toString())));
+                        set(x,y,formu);
+                        return ans=Double.toString(SCell.computForm(getCels(get(x,y).toString())));
                     }
-                 }
-             }  //String
+                }
+            }  //String
             ans = get(x,y).toString();
 
         }
@@ -164,7 +169,7 @@ public class Ex2Sheet implements Sheet {
 
         ///////////////////
         return ans;
-        }
+    }
 
 
 
@@ -196,10 +201,10 @@ public class Ex2Sheet implements Sheet {
             }
 
         }
-return ans;
+        return ans;
     }
 
- //    פונקציה שבמידה ויש תאים בסטרינג מסויים היא מחזירה את הסטרינג המקורי ובמקום השם של התא היא שמה סטרינג של תוכן התא שקראו אליו(במידה והוא תקף)
+    //    פונקציה שבמידה ויש תאים בסטרינג מסויים היא מחזירה את הסטרינג המקורי ובמקום השם של התא היא שמה סטרינג של תוכן התא שקראו אליו(במידה והוא תקף)
     public String getCels(String s){
         String ans = Ex2Utils.ERR_FORM;
         s=s.toUpperCase();
@@ -218,39 +223,41 @@ return ans;
         String[] amountOfCe = new String[count];
         for (int i = 0; i<count;i++){
             if (s.length()>=indofletr[i]+3){
-       if (s.charAt(indofletr[i]+2)>='0'&&s.charAt(indofletr[i]+2)<='9') {
-           cells[countcel] = s.substring(indofletr[i], indofletr[i] + 3);
-           countcel++;
-       }
-       else {
+                if (s.charAt(indofletr[i]+2)>='0'&&s.charAt(indofletr[i]+2)<='9') {
+                    cells[countcel] = s.substring(indofletr[i], indofletr[i] + 3);
+                    countcel++;
+                }
+                else {
+                    cells[countcel]=s.substring(indofletr[i],indofletr[i]+2);
+                    countcel++;
+                }
+            }
+            else {
                 cells[countcel]=s.substring(indofletr[i],indofletr[i]+2);
                 countcel++;
-                }
-       }
-       else {
-           cells[countcel]=s.substring(indofletr[i],indofletr[i]+2);
-           countcel++;
-       }
+            }
         }
         for (int i = 0;i<countcel;i++){
             CellEntry cellEntry = new CellEntry(cells[i]);
             if (isIn(cellEntry.getX(),cellEntry.getY())){
-                if (get(cellEntry.getX(),cellEntry.getY())==null||get(cellEntry.getX(),cellEntry.getY()).getType()==Ex2Utils.TEXT){
+                if (get(cellEntry.getX(),cellEntry.getY())==null||get(cellEntry.getX(),cellEntry.getY()).getType()==Ex2Utils.TEXT||get(cellEntry.getX(),cellEntry.getY()).getType()==Ex2Utils.ERR_CYCLE_FORM){
                     return Ex2Utils.ERR_FORM;
                 }
                 if (containCell( s.replaceAll(cells[i], "("+get(cellEntry.getX(),cellEntry.getY()).getData().replace("=","")+")")))
-                    s=getCels(s.replaceAll(cells[i], "("+get(cellEntry.getX(),cellEntry.getY()).getData().replace("=","")+")"));
+                    s=
+
+                            getCels(s.replaceAll(cells[i], "("+get(cellEntry.getX(),cellEntry.getY()).getData().replace("=","")+")"));
                 else
-                s=   s.replaceAll(cells[i], "("+get(cellEntry.getX(),cellEntry.getY()).getData().replace("=","")+")");// לבדוקקק
+                    s=   s.replaceAll(cells[i], "("+get(cellEntry.getX(),cellEntry.getY()).getData().replace("=","")+")");// לבדוקקק
 
             }
-            }
+        }
 
 
         return s;
     }
     //פונקצית עזר ללא שום משמעות אמיתית אני פשוט צריכה משהו שיסחוב לי תנאי בשיל מצב שבו אני קוראת לתא וזה נהיה פורמולה אחרת זה נתקע לי...
-    }
+}
 
 
 
