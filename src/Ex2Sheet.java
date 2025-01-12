@@ -14,7 +14,6 @@ public class Ex2Sheet implements Sheet {
             for(int j=0;j<y;j=j+1) {
                 table[i][j] = new SCell("");
                 cordin = new CellEntry(Ex2Utils.ABC[i]+Integer.toString(j));
-                // table[i][j].setData(eval(i,j));
             }
         }
         eval();
@@ -179,26 +178,28 @@ public class Ex2Sheet implements Sheet {
 //פונקציית עזר לבדיקה האם יש תאים בסטרינג מסויים
 
     public  static boolean containCell(String s){
-        if (s.charAt(0)!= '=')
+        boolean ans = false;
+        if (s!=null){
+            if (s.charAt(0)!= '=')
             return false;
         s = s.toUpperCase();
-        boolean ans = false;
-        for (int i = 0;i<Ex2Utils.ABC.length;i++){
-            if (s.contains(Ex2Utils.ABC[i])){
-                ans=true;
-                for (int j = 0; j<s.length();j++) {
-                    if (s.charAt(j)>='A'&&s.charAt(j)<='Z'){
-                        if (j==s.length()-1)
+        for (int i = 0;i<Ex2Utils.ABC.length;i++) {
+            if (s.contains(Ex2Utils.ABC[i])) {
+                ans = true;
+                for (int j = 0; j < s.length(); j++) {
+                    if (s.charAt(j) >= 'A' && s.charAt(j) <= 'Z') {
+                        if (j == s.length() - 1)
                             return false;
-                        if (!(s.charAt(j+1)>='0'&&s.charAt(j+1)<='9'))
+                        if (!(s.charAt(j + 1) >= '0' && s.charAt(j + 1) <= '9'))
                             return false;
-                        if (j+2<s.length()-1){
-                            if ((s.charAt(j+2)>='0'&& s.charAt(j+2)<='9')&&(s.charAt(j+3)>='0'&&s.charAt(j+3)<='9'))
+                        if (j + 2 < s.length() - 1) {
+                            if ((s.charAt(j + 2) >= '0' && s.charAt(j + 2) <= '9') && (s.charAt(j + 3) >= '0' && s.charAt(j + 3) <= '9'))
                                 return false;
                         }
                     }
                 }
             }
+        }
 
         }
         return ans;
@@ -215,7 +216,6 @@ public class Ex2Sheet implements Sheet {
         for (int i = 0; i<s.length();i++){
             if (s.charAt(i)>='A'&&s.charAt(i)<='Z') {
                 indofletr[count] = i;
-//                cells[count]=s.charAt(i)+"";
                 count++;
 
             }

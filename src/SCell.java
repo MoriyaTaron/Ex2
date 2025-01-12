@@ -39,6 +39,17 @@ public class SCell implements Cell {
 
     public  static boolean isForm(String s){
         s = s.replace(" ","");
+//        if (Ex2Sheet.containCell(s)){
+//           String[] cells = showcells(s);
+//            for (int i = 0; i<cells.length; i++){
+//                if (cells[i]==null)
+//                    break;
+//                else {
+//                   s= s.replace(cells[i],"1");
+//                }
+//            }
+//
+//        }//  אני צריכה לעשות את הdepth
         try {
             computForm(s);
         } catch (Exception e){
@@ -167,8 +178,6 @@ public class SCell implements Cell {
             return first / second;
         else {
             throw new IllegalArgumentException("not a form");
-            //return  computForm(String.valueOf(first)+form.charAt(indOfop[indOArr-1])+String.valueOf(second));
-
         }
     }
     public static boolean isText(String text){
@@ -220,16 +229,7 @@ public class SCell implements Cell {
     }
     @Override
     public String getData() {
-//        if (isNumber(line))
-//            return line;
-//        else if (isForm(line))
-//            return Double.toString(computForm(line));
-//       else if (isText(line))//&&line.charAt(0)=='=')
-//        return Ex2Utils.ERR_FORM;
-//       else if (isText(line))
            return line;
-//       else return
-
     }
 
     @Override
@@ -255,4 +255,34 @@ public class SCell implements Cell {
         }
         return false;
     }
+    //פונקציית עזר כדי לחלץ מתוך סטרינג את הcellים שנמצאים בתוכו כדי שבאיז פורם אני יחליך את התא למספר כלשהוא נגיד ל1.. רק כדי לבדוק שבמידה ויש בתא הזה משהו   תקין אז גם הפורמולה תקינה
+
+    public static String[] showcells(String s){
+        s = s.toUpperCase().replace("=","");
+        s=s.replace(" ","");
+        String[] cells = new String[s.length()];
+        int count = 0;
+        for (int i = 0;i<s.length();i++){
+           if (s.charAt(i)>='A'&&s.charAt(i)<='z'){
+               if (i+2==s.length()){
+                   cells[count]= s.substring(i);
+                   count++;
+               }
+               else if (s.charAt(i+2)>='0'&&s.charAt(i+2)<='9'){
+                   cells[count]=s.substring(i,i+3);
+                   count++;
+               }
+               else cells[count]=s.substring(i,i+2);
+               count++;
+           }
+        }
+        return cells;
+    }
+
+
 }
+
+
+
+
+
