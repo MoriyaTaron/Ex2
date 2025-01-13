@@ -39,17 +39,17 @@ public class SCell implements Cell {
 
     public  static boolean isForm(String s){
         s = s.replace(" ","");
-//        if (Ex2Sheet.containCell(s)){
-//           String[] cells = showcells(s);
-//            for (int i = 0; i<cells.length; i++){
-//                if (cells[i]==null)
-//                    break;
-//                else {
-//                   s= s.replace(cells[i],"1");
-//                }
-//            }
-//
-//        }//  אני צריכה לעשות את הdepth
+                                                                                                                                                //        if (Ex2Sheet.containCell(s)){
+                                                                                                                                                //           String[] cells = showcells(s);
+                                                                                                                                                //            for (int i = 0; i<cells.length; i++){
+                                                                                                                                                //                if (cells[i]==null)
+                                                                                                                                                //                    break;
+                                                                                                                                                //                else {
+                                                                                                                                                //                   s= s.replace(cells[i],"1");
+                                                                                                                                                //                }
+                                                                                                                                                //            }
+                                                                                                                                                //
+                                                                                                                                                //         }//  שמתי את זה פה בהערה כי אם אני אוריד את זה מהערה זה לא יעבוד אבל אני לא רוצה למחוק את זה כי אם אני מתישהו ימשיך את הdepth  אני אולי ייצטרך את זה
         try {
             computForm(s);
         } catch (Exception e){
@@ -149,7 +149,7 @@ public class SCell implements Cell {
                 }
             }
         }
-        if(indOArr==1){// חייבת לסדר את העניין הזה עם המינוסים ולהסיר מהשורה  הזאת את  ה contains () כי אני רוצה שזה יפתור לי גם מינוסים
+        if(indOArr==1){
             double firstNum = Double.parseDouble(form.substring(0,indOfop[0]).replace("(","").replace(")",""));
             double secNum = Double.parseDouble(form.substring(indOfop[0]+1).replace("(","").replace(")",""));
             if (op[0]=='+')

@@ -40,7 +40,7 @@ public class Ex2Sheet implements Sheet {
                 cordin= new CellEntry(x, y);
                 if (c.toString().toUpperCase().contains(cordin.toString() )){
                      c.setType(Ex2Utils.ERR_CYCLE_FORM);
-                     return Ex2Utils.ERR_CYCLE;//כדי שיהיה דגיאה על מעגליות ( אני עוד חייבת לבדוק את זה ולשפר)
+                     return Ex2Utils.ERR_CYCLE;//כדי שיהיה דגיאה על מעגליות ( לא הספקתי לעשות את הפונקציות של ה errcycle  אז יש לי רק במצב שהתא פיזית קוראה לעצמו)
                 }
                 if (getCels(c.toString()) == Ex2Utils.ERR_FORM) {
                     c.setType(Ex2Utils.ERR_FORM_FORMAT);
@@ -50,7 +50,7 @@ public class Ex2Sheet implements Sheet {
                     c.setType(Ex2Utils.ERR_FORM_FORMAT);
                     return Ex2Utils.ERR_FORM;
                 } else{
-                    c.setType(Ex2Utils.FORM);//נתקע כל הזמןןן
+                    c.setType(Ex2Utils.FORM);
                     return Double.toString(SCell.computForm(getCels(c.toString())));
                 }
             }
@@ -116,7 +116,7 @@ public class Ex2Sheet implements Sheet {
     }
 
     @Override
-    public  boolean isIn(int xx, int yy) { //חושבת שממשתי צריכה לבדוק
+    public  boolean isIn(int xx, int yy) {
         boolean ans = xx>=0 && yy>=0&& xx<=this.width()&&yy<=this.height() ;
 
         // Add your code here
@@ -128,6 +128,12 @@ public class Ex2Sheet implements Sheet {
     @Override
     public int[][] depth() {
         int[][] ans = new int[width()][height()];
+        for (int i = 0; i < width(); i++){
+            for (int j = 0; j < height(); j++){
+                ans[i][j] = -1;
+            }
+        }
+
         // Add your code here
 
         // ///////////////////
@@ -256,12 +262,31 @@ public class Ex2Sheet implements Sheet {
 
         return s;
     }
-    //פונקצית עזר ללא שום משמעות אמיתית אני פשוט צריכה משהו שיסחוב לי תנאי בשיל מצב שבו אני קוראת לתא וזה נהיה פורמולה אחרת זה נתקע לי...
 }
+/**
+//פונקציה לבדיקה האם אפשר לחשב עכשיו
+private boolean canBeComputedNow(int x, int y){
+    Cell cell =table[x][y];
+    if (cell == null || cell.getType() == Ex2Utils.TEXT || cell.getType() == Ex2Utils.NUMBER){
+        return true;
+    }
+    String data = cell.getData();
+    if (!SCell.isForm(data)) {
+        return false;
+    }
+    else if (!containCell(data)&& SCell.isForm(data)) {
+        return true;
+    }
+    else {
+        String[] depend = SCell.showcells(data);
+        for (int i = 0; i<depend.length;i++){
 
-
-
-
+        }
+    }
+    return true;
+}
+לא הספקתי לסיים את זה אז שמתי את זה בהערה
+*/
 
 
 
