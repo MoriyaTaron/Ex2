@@ -1,5 +1,4 @@
-import java.io.IOException;
-import java.util.Arrays;
+import java.io.*;
 // Add your documentation below:
 
 public class Ex2Sheet implements Sheet {
@@ -142,16 +141,49 @@ public class Ex2Sheet implements Sheet {
 
     @Override
     public void load(String fileName) throws IOException {
-        // Add your code here
+            BufferedReader reader = null;
+            try {
+                reader = new BufferedReader(new FileReader(fileName));
+                reader.readLine();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",", 3);
+                    if (parts.length >= 3) {
+                        int x = Integer.parseInt(parts[0].trim());
+                        int y = Integer.parseInt(parts[1].trim());
+                        String data = parts[2].trim();
+                        if (isIn(x, y)) {
+                            set(x, y, data);
+                        }
+                    }
+                }
+            } finally {
+                if (reader != null) {
+                    reader.close();
+                }
+            }
+            eval();
+        }
 
-        /////////////////////
-    }
 
     @Override
     public void save(String fileName) throws IOException {
-        // Add your code here
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+        writer.write("I2CS ArielU: SpreadSheet (Ex2) assignment - this line should be ignored in the load method");
+        writer.newLine();
+        for (int i = 0; i < width(); i++) {
+            for (int j = 0; j < height(); j++) {
+                Cell cell = get(i, j);
+                if (cell != null && !cell.getData().isEmpty()) {
+                    writer.write(i + "," + j + "," + cell.getData());
+                    writer.newLine();
+                }
+            }
+        }
 
-        /////////////////////
+        writer.close();
+
+
     }
 
     @Override
